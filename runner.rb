@@ -13,7 +13,8 @@ team_collection = TeamCollection.new("./data/teams.csv")
 game_collection = GameCollection.new('./data/games_sample.csv')
 @total_games = game_collection.total_games
 
-def find_game_team_by_team_id(id)
+# this is using game_team
+def find_game_team_by_team_id(id) #helpful b/c you'll only look at teams that are acutally in our sample data 
   @total_game_teams.find_all { |game_team| game_team.team_id == id }
 end
 
@@ -97,6 +98,14 @@ end
 def worse_defense_by_team_id
   #add this in but should be line 89 with max by (MOST average goals scored by away team )
 end
+
+##helping Laine
+
+#find gt where the team is away by the team id
+# all_away_games = @total_game_teams.find_all { |gt| gt.team_id == 3 && gt.hoa == "away" }
+# all_goals_when_away = all_away_games.sum { |gt| gt.goals }
+# averge = all_goals_when_away / all_away_games.length.to_f
+# iterate over all the team ids that are available in the game_team file and perform the above methods
 
 
 require "pry"; binding.pry
