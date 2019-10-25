@@ -12,9 +12,14 @@ class GameCollectionTest < Minitest::Test
     assert_instance_of GameCollection, @game_collection
   end
 
-  def test_it_has_total_games
+  def test_it_has_total_games #this is really like test it has an attribute of total games?
     @game_collection.create_games('./data/games_sample.csv')
     assert_equal 8, @game_collection.total_games.length
+  end
+
+  #I think we need another method here to test create_games
+  def test_it_can_create_games
+    #wow how do we test this when we use it in initialize? 
   end
 
   def test_it_can_calculate_highest_total_score
