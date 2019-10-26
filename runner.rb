@@ -14,7 +14,7 @@ game_collection = GameCollection.new('./data/games_sample.csv')
 @total_games = game_collection.total_games
 
 # this is using game_team
-def find_game_team_by_team_id(id) #helpful b/c you'll only look at teams that are acutally in our sample data 
+def find_game_team_by_team_id(id) #helpful b/c you'll only look at teams that are acutally in our sample data
   @total_game_teams.find_all { |game_team| game_team.team_id == id }
 end
 
