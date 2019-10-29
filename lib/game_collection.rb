@@ -99,3 +99,4 @@ class GameCollection
       (total_season_games[1] / total_season_games[0].to_f).round(2)
     end
   end
+end
