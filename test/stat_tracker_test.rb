@@ -96,19 +96,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Chicago Fire", @stat_tracker.worst_defense
   end
 
-  def test_it_has_winningest_team
-    assert_equal "FC Cincinnati", @stat_tracker.winningest_team
-  end
-
-  def test_it_has_best_fans
-    assert_equal "FC Cincinnati", @stat_tracker.best_fans
-  end
-
-  def test_it_has_worst_fans
-    #need to include more data so we an actually get a list of the worst teams?
-    assert_equal ["FC Cincinnati"], @stat_tracker.worst_fans
-  end
-
   def test_it_has_highest_scoring_visitor
     assert_equal "Chicago Fire", @stat_tracker.highest_scoring_visitor
   end
@@ -117,7 +104,7 @@ class StatTrackerTest < Minitest::Test
     assert_equal "FC Cincinnati", @stat_tracker.highest_scoring_home_team
   end
 
-  def test_it_has_a_lowest_scoring_away_team
+  def test_it_has_a_lowest_scoring_visitor
     assert_equal "FC Cincinnati", @stat_tracker.lowest_scoring_visitor
   end
 
@@ -125,18 +112,21 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Chicago Fire", @stat_tracker.lowest_scoring_home_team
   end
 
-  def test_it_has_winningest_team
-    # FC Dallas has only wins
-    assert_equal "Atlanta United", @stat_tracker.winningest_team
-  end
+  # def test_it_has_winningest_team
+  #   assert_equal "FC Cincinnati", @stat_tracker.winningest_team
+  # end
 
-  def test_it_has_the_best_offense
-    assert_equal "FC Cincinnati", @stat_tracker.best_offense
+  def test_it_has_winningest_team
+    assert_equal "Atlanta United", @stat_tracker.winningest_team
   end
 
   def test_it_has_best_fans
     assert_equal "FC Cincinnati", @stat_tracker.best_fans
   end
+
+  # def test_it_has_worst_fans
+  #   assert_equal ["FC Cincinnati"], @stat_tracker.worst_fans
+  # end
 
   def test_it_has_worst_fans
     assert_equal ["Chicago Fire"], @stat_tracker.worst_fans
@@ -150,6 +140,14 @@ class StatTrackerTest < Minitest::Test
                         "link"=>"/api/v1/teams/26"
                       }
     assert_equal team_information, @stat_tracker.team_info("26")
+  end
+
+  def test_it_has_best_season
+    assert_equal "20152016", @stat_tracker.best_season("26")
+  end
+
+  def test_it_has_worst_season
+    assert_equal "20172018", @stat_tracker.worst_season("26")
   end
 
   def test_it_can_calculate_average_win_percentage
@@ -184,9 +182,43 @@ class StatTrackerTest < Minitest::Test
     assert_equal ({"Chicago Fire"=>0.5, "Atlanta United"=>0.33}), @stat_tracker.head_to_head("26")
   end
 
-  def test_it_has_best_season
-    assert_equal "20152016", @stat_tracker.best_season("26")
+  def test_it_has_seasonal_summary
+    expected_hash = {
+      "20172018" => {:postseason =>
+                      {
+                        :win_percentage=>0.5,
+                        :total_goals_scored=>4,
+                        :total_goals_against=>5,
+                        :average_goals_scored=>2.0,
+                        :average_goals_against=>2.5
+                      },
+                    :regular_season =>
+                      {
+                        :win_percentage=>0.25,
+                        :total_goals_scored=>6,
+                        :total_goals_against=>9,
+                        :average_goals_scored=>1.5,
+                        :average_goals_against=>2.25
+                      }},
+      "20152016" => {:postseason =>
+                      {
+                        :win_percentage=>0.5,
+                        :total_goals_scored=>4,
+                        :total_goals_against=>4,
+                        :average_goals_scored=>2.0,
+                        :average_goals_against=>2.0
+                      },
+                     :regular_season =>
+                      {
+                        :win_percentage=>0.5,
+                        :total_goals_scored=>14,
+                        :total_goals_against=>10,
+                        :average_goals_scored=>3.5,
+                        :average_goals_against=>2.5}
+                      }}
+    assert_equal expected_hash, @stat_tracker.seasonal_summary("26")
   end
+
 
   def test_it_has_biggest_bust
     assert_equal "Atlanta United", @stat_tracker.biggest_bust("20172018")
@@ -194,5 +226,22 @@ class StatTrackerTest < Minitest::Test
 
   def test_it_has_biggest_suprise
     assert_equal "FC Cincinnati", @stat_tracker.biggest_surprise("20172018")
+  end
+#winningest_coach
+#worst_coach
+  def test_it_has_most_accurate_team
+    assert_equal "Chicago Fire", @stat_tracker.most_accurate_team("20172018")
+  end
+
+  def test_it_has_least_accurate_team
+    assert_equal "Atlanta United", @stat_tracker.least_accurate_team("20172018")
+  end
+
+  def test_it_has_name_of_team_with_most_tackles
+    assert_equal "Chicago Fire", @stat_tracker.most_tackles("20172018")
+  end
+
+  def test_it_has_name_of_team_with_least_tackles
+    assert_equal "Atlanta United", @stat_tracker.fewest_tackles("20172018")
   end
 end
