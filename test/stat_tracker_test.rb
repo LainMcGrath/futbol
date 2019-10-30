@@ -112,10 +112,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal "Chicago Fire", @stat_tracker.lowest_scoring_home_team
   end
 
-  # def test_it_has_winningest_team
-  #   assert_equal "FC Cincinnati", @stat_tracker.winningest_team
-  # end
-
   def test_it_has_winningest_team
     assert_equal "Atlanta United", @stat_tracker.winningest_team
   end
@@ -123,10 +119,6 @@ class StatTrackerTest < Minitest::Test
   def test_it_has_best_fans
     assert_equal "FC Cincinnati", @stat_tracker.best_fans
   end
-
-  # def test_it_has_worst_fans
-  #   assert_equal ["FC Cincinnati"], @stat_tracker.worst_fans
-  # end
 
   def test_it_has_worst_fans
     assert_equal ["Chicago Fire"], @stat_tracker.worst_fans
