@@ -181,4 +181,14 @@ module SeasonCollection
     team_id = coaches.max_by { |team_id, win_percent| win_percent}.first
       @game_teams.find { |team| team.team_id == team_id}.head_coach
   end
+
+  def worst_coach(season_id)
+    season_teams = team_ids_from_season(season_id)
+    coaches = season_teams.reduce({}) do |win_percent, team_id|
+      win_percent[team_id] = season_win_percent(team_id, season_id)
+      win_percent
+    end
+    team_id = coaches.min_by { |team_id, win_percent| win_percent}.first
+      @game_teams.find { |team| team.team_id == team_id}.head_coach
+  end
 end
