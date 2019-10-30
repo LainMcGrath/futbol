@@ -30,6 +30,6 @@ class SeasonCollectionTest < MiniTest::Test
   end
 
   def test_it_has_seasonal_summary
-
+    assert_equal "ha ha", @stat_tracker.seasonal_summary("26")
   end
 end
