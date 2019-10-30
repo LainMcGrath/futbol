@@ -20,7 +20,6 @@ class SeasonCollectionTest < Minitest::Test
     @teams = teams_collection.total_teams
     @stat_tracker = StatTracker.from_csv(locations)
 
-    # for support methods
     @team_26 = @teams.find {|team| team.team_id == "26"}
     @team_26_games = @games.find_all do |game|
       game.away_team_id == "26" || game.home_team_id == "26"
@@ -121,7 +120,7 @@ class SeasonCollectionTest < Minitest::Test
   end
 
   def test_it_has_least_accurate_team
-    assert_equal "Chicago Fire", @stat_tracker.most_accurate_team("20172018")
+    assert_equal "Atlanta United", @stat_tracker.least_accurate_team("20172018")
   end
 
   def test_it_has_name_of_team_with_most_tackles
