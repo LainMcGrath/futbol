@@ -24,6 +24,7 @@ module SeasonCollection
       end
       (wins.to_f / season.length).round(2)
     end
+
     season_list.max_by {|season| season[1]}.first
   end
 
@@ -43,16 +44,16 @@ module SeasonCollection
         :postseason => {
           win_percentage: win_percentage(team.team_id, post_season_games),
           total_goals_scored: total_goals_scored(team.team_id, post_season_games),
-          total_goals_agaisnt: total_goals_agaisnt(team.team_id, post_season_games),
+          total_goals_against: total_goals_against(team.team_id, post_season_games),
           average_goals_scored: average_goals_scored(team.team_id, post_season_games),
           average_goals_against: average_goals_against(team.team_id, post_season_games)
         },
-        :regularseason => {
+        :regular_season => {
           win_percentage: win_percentage(team.team_id, regular_season_games),
           total_goals_scored: total_goals_scored(team.team_id, regular_season_games),
-          total_goals_agaisnt: total_goals_agaisnt(team.team_id, regular_season_games),
+          total_goals_against: total_goals_against(team.team_id, regular_season_games),
           average_goals_scored: average_goals_scored(team.team_id, regular_season_games),
-          average_goals_agaisnt: average_goals_against(team.team_id, regular_season_games)
+          average_goals_against: average_goals_against(team.team_id, regular_season_games)
         }
       }
       new_list
@@ -84,7 +85,7 @@ module SeasonCollection
     return goals
   end
 
-  def total_goals_agaisnt(team_id, games)
+  def total_goals_against(team_id, games)
     goals = 0
     games.each do |game|
       if team_id == game.away_team_id
@@ -103,6 +104,44 @@ module SeasonCollection
 
   def average_goals_against(team_id, games)
     return 0.0 if games.length == 0
-    (total_goals_agaisnt(team_id, games).to_f / games.length).round(2)
+    (total_goals_against(team_id, games).to_f / games.length).round(2)
+  end
+
+  def biggest_bust(season_id)
+    # season_id = "20172018"
+    team_ids = @teams.map do |team|
+      team.team_id
+    end
+
+    hash = team_ids.reduce({}) do |hash, team_id|
+      ss = seasonal_summary(team_id)[season_id]
+      reg = ss[:regular_season][:win_percentage]
+      require "pry"; binding.pry
+      post = ss[:postseason][:win_percentage]
+      difference = reg - post
+
+      hash[team_id] = difference
+      hash
+    end
+    team_id = hash.max_by { |k,v| v }.first
+    @teams.find { |team| team.team_id == team_id }.team_name
+  end
+
+  def biggest_surprise(season_id)
+    team_ids = @teams.map do |team|
+      team.team_id
+    end
+
+    hash = team_ids.reduce({}) do |hash, team_id|
+      ss = seasonal_summary(team_id)[season_id]
+      reg = ss[:regular_season][:win_percentage]
+      post = ss[:postseason][:win_percentage]
+      difference = reg - post
+
+      hash[team_id] = difference
+      hash
+    end
+    team_id = hash.min_by { |k,v| v }.first
+    @teams.find { |team| team.team_id == team_id }.team_name
   end
 end
