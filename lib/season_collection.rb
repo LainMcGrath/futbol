@@ -126,4 +126,59 @@ module SeasonCollection
     return 0.0 if games.length == 0
     (total_goals_against(team_id, games).to_f / games.length).round(2)
   end
+
+  def biggest_bust(season_id)
+      team_ids = team_ids_from_season(season_id)
+      differences_by_team = team_ids.reduce({}) do |differences_by_team, team_id|
+        differences_by_team[team_id] = difference_between_reg_post_win_percentage(team_id, season_id)
+        differences_by_team
+      end
+      team_id = differences_by_team.max_by { |k,v| v }.first
+      @teams.find { |team| team.team_id == team_id }.team_name
+    end
+
+  def biggest_surprise(season_id)
+    team_ids = team_ids_from_season(season_id)
+    differences_by_team = team_ids.reduce({}) do |differences_by_team, team_id|
+      differences_by_team[team_id] = difference_between_reg_post_win_percentage(team_id, season_id)
+      differences_by_team
+    end
+    team_id = differences_by_team.min_by { |k,v| v }.first
+    @teams.find { |team| team.team_id == team_id }.team_name
+  end
+
+  def games_from_season(season_id)
+    @games.find_all { |game| game.season == season_id }
+  end
+
+  def team_ids_from_season(season_id)
+    season_games = games_from_season(season_id)
+    home_team_ids = season_games.map { |game| game.home_team_id }.uniq
+    away_team_ids = season_games.map { |game| game.away_team_id }.uniq
+    team_ids = (home_team_ids + away_team_ids).uniq
+  end
+
+  def difference_between_reg_post_win_percentage(team_id, season_id)
+      summary = seasonal_summary(team_id)[season_id]
+      reg = summary[:regular_season][:win_percentage]
+      post = summary[:postseason][:win_percentage]
+      difference = reg - post
+  end
+
+   def season_win_percent(team_id, season_id)
+    summary = seasonal_summary(team_id)[season_id]
+    reg = summary[:regular_season][:win_percentage]
+    post = summary[:postseason][:win_percentage]
+    season_win_percent = (reg + post)/2
+  end
+
+  def best_coach(season_id)
+    season_teams = team_ids_from_season(season_id)
+    coaches = season_teams.reduce({}) do |win_percent, team_id|
+      win_percent[team_id] = season_win_percent(team_id, season_id)
+      win_percent
+    end
+    team_id = coaches.max_by { |team_id, win_percent| win_percent}.first
+      @game_teams.find { |team| team.team_id == team_id}.head_coach
+  end
 end
