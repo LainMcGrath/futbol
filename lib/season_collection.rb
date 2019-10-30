@@ -129,17 +129,18 @@ module SeasonCollection
   end
 
   def biggest_bust(season_id)
-    season_games = @games.find_all { |game| game.season == season_id }
-    home_team_ids = season_games.map { |game| game.home_team_id }.uniq
-    away_team_ids = season_games.map { |game| game.away_team_id }.uniq
-    team_ids = (home_team_ids + away_team_ids).uniq
-
+    # season_games = @games.find_all { |game| game.season == season_id }
+    # home_team_ids = season_games.map { |game| game.home_team_id }.uniq
+    # away_team_ids = season_games.map { |game| game.away_team_id }.uniq
+    # team_ids = (home_team_ids + away_team_ids).uniq
+    team_ids = team_ids_from_season(season_id)
     differences_by_team = team_ids.reduce({}) do |differences_by_team, team_id|
-      summary = seasonal_summary(team_id)[season_id]
-      reg = summary[:regular_season][:win_percentage]
-      post = summary[:postseason][:win_percentage]
-      difference = reg - post
-      differences_by_team[team_id] = difference
+      # summary = seasonal_summary(team_id)[season_id]
+      # reg = summary[:regular_season][:win_percentage]
+      # post = summary[:postseason][:win_percentage]
+      # difference = reg - post
+      # differences_by_team[team_id] = difference
+      differences_by_team[team_id] = difference_between_reg_post_win_percentage(team_id, season_id)
       differences_by_team
     end
     team_id = differences_by_team.max_by { |k,v| v }.first
@@ -147,11 +148,11 @@ module SeasonCollection
   end
 
   def biggest_surprise(season_id)
-    season_games = @games.find_all { |game| game.season == season_id }
-    home_team_ids = season_games.map { |game| game.home_team_id }.uniq
-    away_team_ids = season_games.map { |game| game.away_team_id }.uniq
-    team_ids = (home_team_ids + away_team_ids).uniq
-
+    # season_games = @games.find_all { |game| game.season == season_id }
+    # home_team_ids = season_games.map { |game| game.home_team_id }.uniq
+    # away_team_ids = season_games.map { |game| game.away_team_id }.uniq
+    # team_ids = (home_team_ids + away_team_ids).uniq
+    team_ids = team_ids_from_season(season_id)
     differences_by_team = team_ids.reduce({}) do |differences_by_team, team_id|
       summary = seasonal_summary(team_id)[season_id]
       reg = summary[:regular_season][:win_percentage]
@@ -164,4 +165,27 @@ module SeasonCollection
     team_id = differences_by_team.min_by { |k,v| v }.first
     @teams.find { |team| team.team_id == team_id }.team_name
   end
+
+  def games_from_season(season_id)
+    @games.find_all { |game| game.season == season_id }
+  end
+
+  def team_ids_from_season(season_id)
+    season_games = games_from_season(season_id)
+    home_team_ids = season_games.map { |game| game.home_team_id }.uniq
+    away_team_ids = season_games.map { |game| game.away_team_id }.uniq
+    team_ids = (home_team_ids + away_team_ids).uniq
+  end
+
+  def difference_between_reg_post_win_percentage(team_id, season_id)
+    # team_ids.reduce({}) do |differences_by_team, team_id|
+      summary = seasonal_summary(team_id)[season_id]
+      reg = summary[:regular_season][:win_percentage]
+      post = summary[:postseason][:win_percentage]
+      difference = reg - post
+      # differences_by_team[team_id] = difference
+      # differences_by_team
+    # end
+  end
+
 end

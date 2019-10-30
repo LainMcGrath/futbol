@@ -101,4 +101,24 @@ class SeasonCollectionTest < MiniTest::Test
   def test_it_has_biggest_surprise
     assert_equal "FC Cincinnati", @stat_tracker.biggest_surprise("20172018")
   end
+
+  def test_it_can_get_games_from_season
+    assert_equal 10, @stat_tracker.games_from_season("20172018").length
+    assert_equal 0, @stat_tracker.games_from_season("20132014").length
+  end
+
+  def test_it_can_get_team_ids_from_season
+    assert_equal ["1", "4", "26"], @stat_tracker.team_ids_from_season("20172018")
+    assert_equal [], @stat_tracker.team_ids_from_season("20132014")
+  end
+
+  def test_it_list_difference_between_regular_and_postseason_win_percentage_by_team_id
+    assert_equal '.25', @stat_tracker.difference_between_reg_post_win_percentage("26", "20172018")
+
+  end
+
+  def test_it_has_name_of_team_with_most_tackles
+    skip
+    assert_equal "", @stat_tracker.most_tackles
+  end
 end
