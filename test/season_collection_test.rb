@@ -93,4 +93,9 @@ class SeasonCollectionTest < MiniTest::Test
   def test_it_has_average_goals_against
     assert_equal 2.5, @stat_tracker.average_goals_against("26", @team_26_post_season_games)
   end
+
+  def test_it_can_find_best_coach
+    assert_equal "", @stat_tracker.best_coach("20172018")
+  end
+
 end
