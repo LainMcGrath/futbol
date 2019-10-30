@@ -198,35 +198,32 @@ module SeasonCollection
   end
 
   def most_tackles(season_id)
-
     team_ids = team_ids_from_season(season_id)
 
-    hash = team_ids.reduce({}) do |hash, team_id|
+    tackles_by_team_id = team_ids.reduce({}) do |tackles_by_team_id, team_id|
       team = @teams.find { |team| team.team_id == team_id }
       season_id_four = season_id[0..3]
       season_games = team.all_team_games.find_all { |game| game.game_id.start_with?(season_id_four) }
       season_tackles = season_games.sum { |game| game.tackles }
-      hash[team_id] = season_tackles
-      hash
+      tackles_by_team_id[team_id] = season_tackles
+      tackles_by_team_id
     end
-
-    team_id = hash.max_by { |team_id, tackles| tackles }.first
+    team_id = tackles_by_team_id.max_by { |team_id, tackles| tackles }.first
     @teams.find { |team| team.team_id == team_id }.team_name
-
   end
 
   def fewest_tackles(season_id)
     team_ids = team_ids_from_season(season_id)
 
-    hash = team_ids.reduce({}) do |hash, team_id|
-    team = @teams.find { |team| team.team_id == team_id }
+    tackles_by_team_id = team_ids.reduce({}) do |tackles_by_team_id, team_id|
+      team = @teams.find { |team| team.team_id == team_id }
       season_id_four = season_id[0..3]
       season_games = team.all_team_games.find_all { |game| game.game_id.start_with?(season_id_four)}
       season_tackles = season_games.sum { |game| game.tackles }
-      hash[team_id] = season_tackles
-      hash
+      tackles_by_team_id[team_id] = season_tackles
+      tackles_by_team_id
     end
-    team_id = hash.min_by { |team_id, tackles| tackles }.first
+    team_id = tackles_by_team_id.min_by { |team_id, tackles| tackles }.first
     @teams.find { |team| team.team_id == team_id }.team_name
   end
 end
