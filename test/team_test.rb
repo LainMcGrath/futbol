@@ -4,7 +4,6 @@ require './lib/team'
 require 'mocha/minitest'
 require './lib/game_team'
 
-
 class TeamsTest < Minitest::Test
   def setup
     csv = CSV.read('./test/data/game_teams_sample.csv', headers: true, header_converters: :symbol)
@@ -25,14 +24,11 @@ class TeamsTest < Minitest::Test
           game_team.game_id == game_id && game_team.team_id != team[:team_id]
         end
       end
-      # all_opponent_games = @total_games.find_all do |game|
-      #   team[:team_id] == game.team_id
-      # end
+
       Team.new(team, all_team_games, all_opponent_games)
     end
     @team = @teams.first
     @team_26 = @teams.find {|team| team.team_id == "26"}
-
   end
 
   def test_it_exists
@@ -46,6 +42,9 @@ class TeamsTest < Minitest::Test
     assert_equal "23", @team.franchise_id
     assert_equal "Atlanta United", @team.team_name
     assert_equal "ATL", @team.abbreviation
+    assert_equal "/api/v1/teams/1", @team.link
+    assert_equal 14, @team.all_team_games.length
+    assert_equal 14, @team.all_opponent_games.length
   end
 
   def test_it_has_a_win_percentage

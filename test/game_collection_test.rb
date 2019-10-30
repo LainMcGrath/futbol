@@ -11,10 +11,13 @@ class GameCollectionTest < Minitest::Test
     assert_instance_of GameCollection, @game_collection
   end
 
-  #######need to test def create_games#########
+  def test_it_can_create_games
+    @game_collection.create_games("./test/data/games_sample.csv")
+    expected = @game_collection.total_games.all? { |game| game.class == Game }
+    assert_equal true, expected
+  end
 
   def test_it_has_total_games
-    @game_collection.create_games('./test/data/games_sample.csv')
     assert_equal 20, @game_collection.total_games.length
   end
 
