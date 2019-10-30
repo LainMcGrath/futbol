@@ -24,7 +24,6 @@ module SeasonCollection
       end
       (wins.to_f / season.length).round(2)
     end
-
     season_list.max_by {|season| season[1]}.first
   end
 
@@ -160,10 +159,43 @@ module SeasonCollection
   end
 
   def difference_between_reg_post_win_percentage(team_id, season_id)
-      summary = seasonal_summary(team_id)[season_id]
-      reg = summary[:regular_season][:win_percentage]
-      post = summary[:postseason][:win_percentage]
-      difference = reg - post
+    summary = seasonal_summary(team_id)[season_id]
+    reg = summary[:regular_season][:win_percentage]
+    post = summary[:postseason][:win_percentage]
+    difference = reg - post
   end
+
+  def most_tackles(season_id)
+
+    team_ids = team_ids_from_season(season_id)
+
+    hash = team_ids.reduce({}) do |hash, team_id|
+      team = @teams.find { |team| team.team_id == team_id }
+      season_id_four = season_id[0..3]
+      season_games = team.all_team_games.find_all { |game| game.game_id.start_with?(season_id_four) }
+      season_tackles = season_games.sum { |game| game.tackles }
+      hash[team_id] = season_tackles
+      hash
+    end
+
+    team_id = hash.max_by { |team_id, tackles| tackles }.first
+    @teams.find { |team| team.team_id == team_id }.team_name
+
+  end
+
+  def fewest_tackles(season_id)
+    team_ids = team_ids_from_season(season_id)
+
+  hash = team_ids.reduce({}) do |hash, team_id|
+  team = @teams.find { |team| team.team_id == team_id }
+    season_id_four = season_id[0..3]
+    season_games = team.all_team_games.find_all { |game| game.game_id.start_with?(season_id_four)}
+    season_tackles = season_games.sum { |game| game.tackles }
+    hash[team_id] = season_tackles
+    hash
+  end
+  team_id = hash.min_by { |team_id, tackles| tackles }.first
+  @teams.find { |team| team.team_id == team_id }.team_name
+end
 
 end
