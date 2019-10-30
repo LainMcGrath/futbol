@@ -26,10 +26,11 @@ class SeasonCollectionTest < MiniTest::Test
   end
 
   def test_it_has_worst_season
-
+    assert_equal "20152016", @stat_tracker.worst_season("26")
   end
 
   def test_it_has_seasonal_summary
+    skip
     assert_equal "ha ha", @stat_tracker.seasonal_summary("26")
   end
 end

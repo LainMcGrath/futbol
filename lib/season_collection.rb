@@ -27,8 +27,29 @@ module SeasonCollection
     season_list.max_by {|season| season[1]}.first
   end
 
-  def worst_season
-
+  def worst_season(team_id)
+    team = @teams.find {|team| team.team_id == team_id}
+    team_games = @games.find_all do |game|
+      game.away_team_id == team.team_id || game.home_team_id == team.team_id
+    end
+    season_list = team_games.reduce({}) do |new_list, team_game|
+      if !new_list.keys.include?(team_game.season)
+        new_list[team_game.season] = []
+      end
+      new_list[team_game.season] << team_game
+      new_list
+    end
+    season_list.transform_values! do |season|
+      wins = season.count do |game|
+        if team.team_id == game.away_team_id
+          game.away_goals > game.home_goals
+        else
+          game.home_goals > game.away_goals
+        end
+      end
+      (wins.to_f / season.length).round(2)
+    end
+    season_list.min_by {|season| season[1]}.first
   end
 
   def seasonal_summary(team_id)
@@ -47,7 +68,7 @@ module SeasonCollection
           average_goals_scored: average_goals_scored(team.team_id, post_season_games),
           average_goals_against: average_goals_against(team.team_id, post_season_games)
         },
-        :regularseason => {
+        :regular_season => {
           win_percentage: win_percentage(team.team_id, regular_season_games),
           total_goals_scored: total_goals_scored(team.team_id, regular_season_games),
           total_goals_against: total_goals_against(team.team_id, regular_season_games),
