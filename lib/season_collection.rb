@@ -43,16 +43,16 @@ module SeasonCollection
         :postseason => {
           win_percentage: win_percentage(team.team_id, post_season_games),
           total_goals_scored: total_goals_scored(team.team_id, post_season_games),
-          total_goals_agaisnt: total_goals_agaisnt(team.team_id, post_season_games),
+          total_goals_against: total_goals_against(team.team_id, post_season_games),
           average_goals_scored: average_goals_scored(team.team_id, post_season_games),
           average_goals_against: average_goals_against(team.team_id, post_season_games)
         },
         :regularseason => {
           win_percentage: win_percentage(team.team_id, regular_season_games),
           total_goals_scored: total_goals_scored(team.team_id, regular_season_games),
-          total_goals_agaisnt: total_goals_agaisnt(team.team_id, regular_season_games),
+          total_goals_against: total_goals_against(team.team_id, regular_season_games),
           average_goals_scored: average_goals_scored(team.team_id, regular_season_games),
-          average_goals_agaisnt: average_goals_against(team.team_id, regular_season_games)
+          average_goals_against: average_goals_against(team.team_id, regular_season_games)
         }
       }
       new_list
@@ -84,7 +84,7 @@ module SeasonCollection
     return goals
   end
 
-  def total_goals_agaisnt(team_id, games)
+  def total_goals_against(team_id, games)
     goals = 0
     games.each do |game|
       if team_id == game.away_team_id
@@ -103,6 +103,6 @@ module SeasonCollection
 
   def average_goals_against(team_id, games)
     return 0.0 if games.length == 0
-    (total_goals_agaisnt(team_id, games).to_f / games.length).round(2)
+    (total_goals_against(team_id, games).to_f / games.length).round(2)
   end
 end
