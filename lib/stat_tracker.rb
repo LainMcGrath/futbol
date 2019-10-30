@@ -13,6 +13,7 @@ class StatTracker
     #game_teams_path = GameTeamsCollection.new(team_path)
     @games = @games_collection.total_games
     @teams = @teams_collection.total_teams
+    @game_teams = @teams_collection.total_games
     #instance variable that holds onto all games and all teams
   end
 
