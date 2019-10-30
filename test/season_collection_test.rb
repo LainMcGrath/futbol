@@ -117,8 +117,17 @@ class SeasonCollectionTest < MiniTest::Test
 
   end
 
+  def test_it_has_most_accurate_team
+    assert_equal 0, @stat_tracker.most_accurate_team("20172018")
+  end
+
+  def test_it_has_least_accurate_team
+
+  end
+
   def test_it_has_name_of_team_with_most_tackles
     skip
     assert_equal "", @stat_tracker.most_tackles
   end
+
 end
