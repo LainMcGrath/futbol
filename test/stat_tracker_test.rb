@@ -177,4 +177,16 @@ class StatTrackerTest < Minitest::Test
   def test_it_has_head_to_head
     assert_equal ({"Chicago Fire"=>0.5, "Atlanta United"=>0.33}), @stat_tracker.head_to_head("26")
   end
+
+  def test_it_has_best_season
+    assert_equal "20152016", @stat_tracker.best_season("26")
+  end
+
+  def test_it_has_biggest_bust
+    assert_equal "Atlanta United", @stat_tracker.biggest_bust("20172018")
+  end
+
+  def test_it_has_biggest_suprise
+    assert_equal "FC Cincinnati", @stat_tracker.biggest_surprise("20172018")
+  end
 end
