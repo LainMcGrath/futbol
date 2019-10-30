@@ -129,40 +129,39 @@ module SeasonCollection
   end
 
   def biggest_bust(season_id)
-    # season_id = "20172018"
-    team_ids = @teams.map do |team|
-      team.team_id
-    end
+    season_games = @games.find_all { |game| game.season == season_id }
+    home_team_ids = season_games.map { |game| game.home_team_id }.uniq
+    away_team_ids = season_games.map { |game| game.away_team_id }.uniq
+    team_ids = (home_team_ids + away_team_ids).uniq
 
-    hash = team_ids.reduce({}) do |hash, team_id|
-      ss = seasonal_summary(team_id)[season_id]
-      reg = ss[:regular_season][:win_percentage]
-      require "pry"; binding.pry
-      post = ss[:postseason][:win_percentage]
+    differences_by_team = team_ids.reduce({}) do |differences_by_team, team_id|
+      summary = seasonal_summary(team_id)[season_id]
+      reg = summary[:regular_season][:win_percentage]
+      post = summary[:postseason][:win_percentage]
       difference = reg - post
-
-      hash[team_id] = difference
-      hash
+      differences_by_team[team_id] = difference
+      differences_by_team
     end
-    team_id = hash.max_by { |k,v| v }.first
+    team_id = differences_by_team.max_by { |k,v| v }.first
     @teams.find { |team| team.team_id == team_id }.team_name
   end
 
   def biggest_surprise(season_id)
-    team_ids = @teams.map do |team|
-      team.team_id
-    end
+    season_games = @games.find_all { |game| game.season == season_id }
+    home_team_ids = season_games.map { |game| game.home_team_id }.uniq
+    away_team_ids = season_games.map { |game| game.away_team_id }.uniq
+    team_ids = (home_team_ids + away_team_ids).uniq
 
-    hash = team_ids.reduce({}) do |hash, team_id|
-      ss = seasonal_summary(team_id)[season_id]
-      reg = ss[:regular_season][:win_percentage]
-      post = ss[:postseason][:win_percentage]
+    differences_by_team = team_ids.reduce({}) do |differences_by_team, team_id|
+      summary = seasonal_summary(team_id)[season_id]
+      reg = summary[:regular_season][:win_percentage]
+      post = summary[:postseason][:win_percentage]
       difference = reg - post
 
-      hash[team_id] = difference
-      hash
+      differences_by_team[team_id] = difference
+      differences_by_team
     end
-    team_id = hash.min_by { |k,v| v }.first
+    team_id = differences_by_team.min_by { |k,v| v }.first
     @teams.find { |team| team.team_id == team_id }.team_name
   end
 end
