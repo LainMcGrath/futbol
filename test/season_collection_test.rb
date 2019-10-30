@@ -47,7 +47,7 @@ class SeasonCollectionTest < MiniTest::Test
                         :average_goals_scored=>2.0,
                         :average_goals_against=>2.5
                       },
-                    :regular_season =>
+                    :regularseason =>
                       {
                         :win_percentage=>0.25,
                         :total_goals_scored=>6,
@@ -63,7 +63,7 @@ class SeasonCollectionTest < MiniTest::Test
                         :average_goals_scored=>2.0,
                         :average_goals_against=>2.0
                       },
-                     :regular_season =>
+                     :regularseason =>
                       {
                         :win_percentage=>0.5,
                         :total_goals_scored=>14,
@@ -94,11 +94,15 @@ class SeasonCollectionTest < MiniTest::Test
     assert_equal 2.5, @stat_tracker.average_goals_against("26", @team_26_post_season_games)
   end
 
+  def test_it_can_find_win_percent
+    assert_equal 0.38, @stat_tracker.season_win_percent("26", "20172018")
+  end
+
   def test_it_can_find_best_coach
-    assert_equal "", @stat_tracker.best_coach("20172018")
+    assert_equal "Dave Hakstol", @stat_tracker.best_coach("20172018")
   end
 
   def test_it_can_find_worst_coach
-    assert_equal "", @stat_tracker.worst_coach("20172018")
+    assert_equal "John Hynes", @stat_tracker.worst_coach("20172018")
   end
 end
