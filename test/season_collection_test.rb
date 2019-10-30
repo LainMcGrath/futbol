@@ -4,7 +4,7 @@ require './lib/stat_tracker.rb'
 require './lib/game_collection.rb'
 require './lib/team_collection.rb'
 
-class SeasonCollectionTest < MiniTest::Test
+class SeasonCollectionTest < Minitest::Test
   def setup
     game_path = './test/data/games_sample.csv'
     team_path = './test/data/teams_sample.csv'
