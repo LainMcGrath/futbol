@@ -116,6 +116,14 @@ class SeasonCollectionTest < MiniTest::Test
     assert_equal -0.25, @stat_tracker.difference_between_reg_post_win_percentage("26", "20172018")
   end
 
+  def test_it_has_most_accurate_team
+    assert_equal "Chicago Fire", @stat_tracker.most_accurate_team("20172018")
+  end
+
+  def test_it_has_least_accurate_team
+    assert_equal "Chicago Fire", @stat_tracker.most_accurate_team("20172018")
+  end
+
   def test_it_has_name_of_team_with_most_tackles
     assert_equal "Chicago Fire", @stat_tracker.most_tackles("20172018")
   end
@@ -123,6 +131,4 @@ class SeasonCollectionTest < MiniTest::Test
   def test_it_has_name_of_team_with_least_tackles
     assert_equal "Atlanta United", @stat_tracker.fewest_tackles("20172018")
   end
-
-
 end

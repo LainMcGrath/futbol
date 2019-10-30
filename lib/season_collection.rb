@@ -165,6 +165,38 @@ module SeasonCollection
     difference = reg - post
   end
 
+  def most_accurate_team(season_id)
+    team_ids = team_ids_from_season(season_id)
+
+    team_shot_percentage_list = team_ids.reduce({}) do |hash, team_id|
+      team = @teams.find { |team| team.team_id == team_id }
+      season_id_four = season_id[0..3]
+      season_games = team.all_team_games.find_all { |game| game.game_id.start_with?(season_id_four) }
+      season_goals = season_games.sum { |game| game.goals}
+      season_shots = season_games.sum { |game| game.shots}
+      hash[team_id] = (season_goals.to_f / season_shots).round(6)
+      hash
+    end
+    team_id = team_shot_percentage_list.max_by { |team_id, shot_percentage| shot_percentage }.first
+    @teams.find { |team| team.team_id == team_id }.team_name
+  end
+
+  def least_accurate_team(season_id)
+    team_ids = team_ids_from_season(season_id)
+
+    team_shot_percentage_list = team_ids.reduce({}) do |hash, team_id|
+      team = @teams.find { |team| team.team_id == team_id }
+      season_id_four = season_id[0..3]
+      season_games = team.all_team_games.find_all { |game| game.game_id.start_with?(season_id_four) }
+      season_goals = season_games.sum { |game| game.goals}
+      season_shots = season_games.sum { |game| game.shots}
+      hash[team_id] = (season_goals.to_f / season_shots).round(6)
+      hash
+    end
+    team_id = team_shot_percentage_list.min_by { |team_id, shot_percentage| shot_percentage }.first
+    @teams.find { |team| team.team_id == team_id }.team_name
+  end
+
   def most_tackles(season_id)
     team_ids = team_ids_from_season(season_id)
 
@@ -194,5 +226,4 @@ module SeasonCollection
     team_id = tackles_by_team_id.min_by { |team_id, tackles| tackles }.first
     @teams.find { |team| team.team_id == team_id }.team_name
   end
-
 end
