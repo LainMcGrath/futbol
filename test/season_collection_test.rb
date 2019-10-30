@@ -113,7 +113,7 @@ class SeasonCollectionTest < MiniTest::Test
   end
 
   def test_it_list_difference_between_regular_and_postseason_win_percentage_by_team_id
-    assert_equal '.25', @stat_tracker.difference_between_reg_post_win_percentage("26", "20172018")
+    assert_equal -0.25, @stat_tracker.difference_between_reg_post_win_percentage("26", "20172018")
 
   end
 
