@@ -181,4 +181,8 @@ class StatTrackerTest < Minitest::Test
   def test_it_can_find_best_coach
     assert_equal "", @stat_tracker.best_coach("20172018")
   end
+
+  def test_it_can_find_worst_coach
+    assert_equal "", @stat_tracker.worst_coach("20172018")
+  end
 end
