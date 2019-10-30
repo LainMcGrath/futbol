@@ -32,4 +32,12 @@ class SeasonCollectionTest < MiniTest::Test
   def test_it_has_seasonal_summary
     assert_equal "ha ha", @stat_tracker.seasonal_summary("26")
   end
+
+  def test_it_has_biggest_bust
+    assert_equal "Atlanta United", @stat_tracker.biggest_bust("20172018")
+  end
+
+  def test_it_has_biggest_surprise
+    assert_equal "FC Cincinnati", @stat_tracker.biggest_surprise("20172018")
+  end
 end
