@@ -1,7 +1,5 @@
 module SeasonCollection
-  # inherits @games = @games_collection.total_games
-  #          @teams = @teams_collection.total_teams
-  # use pry -> @games & @teams to see inheritance
+
   def best_season(team_id)
     team = @teams.find {|team| team.team_id == team_id}
     team_games = @games.find_all do |game|
@@ -128,14 +126,14 @@ module SeasonCollection
   end
 
   def biggest_bust(season_id)
-      team_ids = team_ids_from_season(season_id)
-      differences_by_team = team_ids.reduce({}) do |differences_by_team, team_id|
-        differences_by_team[team_id] = difference_between_reg_post_win_percentage(team_id, season_id)
-        differences_by_team
-      end
-      team_id = differences_by_team.max_by { |k,v| v }.first
-      @teams.find { |team| team.team_id == team_id }.team_name
+    team_ids = team_ids_from_season(season_id)
+    differences_by_team = team_ids.reduce({}) do |differences_by_team, team_id|
+      differences_by_team[team_id] = difference_between_reg_post_win_percentage(team_id, season_id)
+      differences_by_team
     end
+    team_id = differences_by_team.max_by { |k,v| v }.first
+    @teams.find { |team| team.team_id == team_id }.team_name
+  end
 
   def biggest_surprise(season_id)
     team_ids = team_ids_from_season(season_id)
@@ -159,52 +157,11 @@ module SeasonCollection
   end
 
   def difference_between_reg_post_win_percentage(team_id, season_id)
-      summary = seasonal_summary(team_id)[season_id]
-      reg = summary[:regular_season][:win_percentage]
-      post = summary[:postseason][:win_percentage]
-      difference = reg - post
+    summary = seasonal_summary(team_id)[season_id]
+    reg = summary[:regular_season][:win_percentage]
+    post = summary[:postseason][:win_percentage]
+    difference = reg - post
   end
-
-  def winningest_coach(season_id)
-    team_ids = team_ids_from_season(season_id)
-    season_games = games_from_season(season_id)
-    season_ids = season_games.map do |game|
-      game.game_id
-    end
-    hash = team_ids.reduce({}) do |new_list, team_id|
-      team = @teams.find { |team| team.team_id == team_id }
-      season_games = @game_teams.find_all do |game_team|
-        game_team.team_id == team_id && season_ids.include?(game_team.game_id)
-      end
-      wins = season_games.count {|game| game.result == "WIN"}
-      win_percentage = (wins.to_f / season_games.length)
-      new_list[team_id] = win_percentage
-      new_list
-    end
-    team_id = hash.max_by { |team_id, win_percentage| win_percentage }.first
-    @game_teams.find{ |game| game.team_id == team_id && season_ids.include?(game.game_id)}.head_coach
-  end
-
-  def worst_coach(season_id)
-   team_ids = team_ids_from_season(season_id)
-   season_games = games_from_season(season_id)
-   season_ids = season_games.map do |game|
-     game.game_id
-   end
-   season_games = @game_teams.find_all do |game_team|
-     season_ids.include?(game_team.game_id)
-   end
-   games_by_coach = season_games.reduce({}) do |new_list, game_team|
-     new_list[game_team.head_coach] = [] if !new_list.keys.include?(game_team.head_coach)
-     new_list[game_team.head_coach] << game_team.result
-     new_list
-   end
-   games_by_coach.transform_values! do |results|
-     wins = results.count {|result| result == "WIN"}
-     wins.to_f / results.length
-   end
-   games_by_coach.min_by { |coach, win_percentage| win_percentage }.first
- end
 
   def most_accurate_team(season_id)
     team_ids = team_ids_from_season(season_id)

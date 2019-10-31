@@ -211,7 +211,6 @@ class StatTrackerTest < Minitest::Test
     assert_equal expected_hash, @stat_tracker.seasonal_summary("26")
   end
 
-
   def test_it_has_biggest_bust
     assert_equal "Atlanta United", @stat_tracker.biggest_bust("20172018")
   end
