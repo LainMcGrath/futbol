@@ -1,7 +1,4 @@
 module SeasonCollection
-  # inherits @games = @games_collection.total_games
-  #          @teams = @teams_collection.total_teams
-  # use pry -> @games & @teams to see inheritance
   def best_season(team_id)
     team = @teams.find {|team| team.team_id == team_id}
     team_games = @games.find_all do |game|

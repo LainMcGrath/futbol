@@ -14,5 +14,4 @@ class GameTeamCollection
       GameTeam.new(row)
     end
   end
-
 end

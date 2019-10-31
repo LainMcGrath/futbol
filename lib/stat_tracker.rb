@@ -8,14 +8,11 @@ class StatTracker
   attr_reader :games_collection, :teams_collection, :games, :teams, :game_teams
 
   def initialize(game_path, team_path, game_team_path)
-    # should we move the creation of instances into a method
     @games_collection = GameCollection.new(game_path)
     @teams_collection = TeamCollection.new(team_path, game_team_path)
-    #game_teams_path = GameTeamsCollection.new(team_path)
     @games = @games_collection.total_games
     @teams = @teams_collection.total_teams
     @game_teams = @teams_collection.total_games
-    #instance variable that holds onto all games and all teams
   end
 
   def self.from_csv(locations)
@@ -107,7 +104,6 @@ class StatTracker
   end
 
   def worst_fans
-    #need to include more data so we an actually get a list of the worst teams?
     @teams_collection.worst_fans
   end
 
