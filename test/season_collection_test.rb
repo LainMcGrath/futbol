@@ -130,4 +130,5 @@ class SeasonCollectionTest < Minitest::Test
   def test_it_has_name_of_team_with_least_tackles
     assert_equal "Atlanta United", @stat_tracker.fewest_tackles("20172018")
   end
+
 end
