@@ -227,7 +227,7 @@ class StatTrackerTest < Minitest::Test
   def test_it_can_find_worst_coach
     assert_equal "John Hynes", @stat_tracker.worst_coach("20172018")
   end
-  
+
   def test_it_has_most_accurate_team
     assert_equal "Chicago Fire", @stat_tracker.most_accurate_team("20172018")
   end
