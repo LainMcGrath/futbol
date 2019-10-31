@@ -165,30 +165,44 @@ module SeasonCollection
       difference = reg - post
   end
 
-   def season_win_percent(team_id, season_id)
-    summary = seasonal_summary(team_id)[season_id]
-    reg = summary[:regularseason][:win_percentage]
-    post = summary[:postseason][:win_percentage]
-    season_win_percent = ((reg + post) / 2 )
-  end
-
-  def best_coach(season_id)
-    season_teams = team_ids_from_season(season_id)
-    coaches = season_teams.reduce({}) do |win_percent, team_id|
-      win_percent[team_id] = season_win_percent(team_id, season_id)
-      win_percent
+  def winningest_coach(season_id)
+    team_ids = team_ids_from_season(season_id)
+    season_games = games_from_season(season_id)
+    season_ids = season_games.map do |game|
+      game.game_id
     end
-    team_id = coaches.max_by { |team_id, win_percent| win_percent}.first
-      @game_teams.find { |team| team.team_id == team_id}.head_coach
+    hash = team_ids.reduce({}) do |new_list, team_id|
+      team = @teams.find { |team| team.team_id == team_id }
+      season_games = @game_teams.find_all do |game_team|
+        game_team.team_id == team_id && season_ids.include?(game_team.game_id)
+      end
+      wins = season_games.count {|game| game.result == "WIN"}
+      win_percentage = (wins.to_f / season_games.length)
+      new_list[team_id] = win_percentage
+      new_list
+    end
+    team_id = hash.max_by { |team_id, win_percentage| win_percentage }.first
+    @game_teams.find{ |game| game.team_id == team_id && season_ids.include?(game.game_id)}.head_coach
   end
 
   def worst_coach(season_id)
-    season_teams = team_ids_from_season(season_id)
-    coaches = season_teams.reduce({}) do |win_percent, team_id|
-      win_percent[team_id] = season_win_percent(team_id, season_id)
-      win_percent
-    end
-    team_id = coaches.min_by { |team_id, win_percent| win_percent}.first
-      @game_teams.find { |team| team.team_id == team_id}.head_coach
-  end
+   team_ids = team_ids_from_season(season_id)
+   season_games = games_from_season(season_id)
+   season_ids = season_games.map do |game|
+     game.game_id
+   end
+   season_games = @game_teams.find_all do |game_team|
+     season_ids.include?(game_team.game_id)
+   end
+   games_by_coach = season_games.reduce({}) do |new_list, game_team|
+     new_list[game_team.head_coach] = [] if !new_list.keys.include?(game_team.head_coach)
+     new_list[game_team.head_coach] << game_team.result
+     new_list
+   end
+   games_by_coach.transform_values! do |results|
+     wins = results.count {|result| result == "WIN"}
+     wins.to_f / results.length
+   end
+   games_by_coach.min_by { |coach, win_percentage| win_percentage }.first
+ end
 end

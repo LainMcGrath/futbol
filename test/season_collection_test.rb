@@ -37,42 +37,42 @@ class SeasonCollectionTest < MiniTest::Test
     assert_equal "20172018", @stat_tracker.worst_season("26")
   end
 
-  def test_it_has_seasonal_summary
-    expected_hash = {
-      "20172018" => {:postseason =>
-                      {
-                        :win_percentage=>0.5,
-                        :total_goals_scored=>4,
-                        :total_goals_against=>5,
-                        :average_goals_scored=>2.0,
-                        :average_goals_against=>2.5
-                      },
-                    :regularseason =>
-                      {
-                        :win_percentage=>0.25,
-                        :total_goals_scored=>6,
-                        :total_goals_against=>9,
-                        :average_goals_scored=>1.5,
-                        :average_goals_against=>2.25
-                      }},
-      "20152016" => {:postseason =>
-                      {
-                        :win_percentage=>0.5,
-                        :total_goals_scored=>4,
-                        :total_goals_against=>4,
-                        :average_goals_scored=>2.0,
-                        :average_goals_against=>2.0
-                      },
-                     :regularseason =>
-                      {
-                        :win_percentage=>0.5,
-                        :total_goals_scored=>14,
-                        :total_goals_against=>10,
-                        :average_goals_scored=>3.5,
-                        :average_goals_against=>2.5}
-                      }}
-    assert_equal expected_hash, @stat_tracker.seasonal_summary("26")
-  end
+  # def test_it_has_seasonal_summary
+  #   expected_hash = {
+  #     "20172018" => {:postseason =>
+  #                     {
+  #                       :win_percentage=>0.5,
+  #                       :total_goals_scored=>4,
+  #                       :total_goals_against=>5,
+  #                       :average_goals_scored=>2.0,
+  #                       :average_goals_against=>2.5
+  #                     },
+  #                   :regularseason =>
+  #                     {
+  #                       :win_percentage=>0.25,
+  #                       :total_goals_scored=>6,
+  #                       :total_goals_against=>9,
+  #                       :average_goals_scored=>1.5,
+  #                       :average_goals_against=>2.25
+  #                     }},
+  #     "20152016" => {:postseason =>
+  #                     {
+  #                       :win_percentage=>0.5,
+  #                       :total_goals_scored=>4,
+  #                       :total_goals_against=>4,
+  #                       :average_goals_scored=>2.0,
+  #                       :average_goals_against=>2.0
+  #                     },
+  #                    :regularseason =>
+  #                     {
+  #                       :win_percentage=>0.5,
+  #                       :total_goals_scored=>14,
+  #                       :total_goals_against=>10,
+  #                       :average_goals_scored=>3.5,
+  #                       :average_goals_against=>2.5}
+  #                     }}
+  #   assert_equal expected_hash, @stat_tracker.seasonal_summary("26")
+  # end
 
   def test_it_has_a_win_percentage
     assert_equal 0.5, @stat_tracker.win_percentage("26", @team_26_post_season_games)
@@ -94,12 +94,8 @@ class SeasonCollectionTest < MiniTest::Test
     assert_equal 2.5, @stat_tracker.average_goals_against("26", @team_26_post_season_games)
   end
 
-  def test_it_can_find_win_percent
-    assert_equal 0.38, @stat_tracker.season_win_percent("26", "20172018")
-  end
-
   def test_it_can_find_best_coach
-    assert_equal "Dave Hakstol", @stat_tracker.best_coach("20172018")
+    assert_equal "Dave Hakstol", @stat_tracker.winningest_coach("20172018")
   end
 
   def test_it_can_find_worst_coach
