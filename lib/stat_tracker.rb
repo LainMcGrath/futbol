@@ -5,6 +5,7 @@ require_relative './season_collection'
 
 class StatTracker
   include SeasonCollection
+  attr_reader :games_collection, :teams_collection, :games, :teams, :game_teams
 
   def initialize(game_path, team_path, game_team_path)
     # should we move the creation of instances into a method
@@ -13,6 +14,7 @@ class StatTracker
     #game_teams_path = GameTeamsCollection.new(team_path)
     @games = @games_collection.total_games
     @teams = @teams_collection.total_teams
+    @game_teams = @teams_collection.total_games
     #instance variable that holds onto all games and all teams
   end
 

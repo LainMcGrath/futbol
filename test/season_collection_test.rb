@@ -4,7 +4,7 @@ require './lib/stat_tracker.rb'
 require './lib/game_collection.rb'
 require './lib/team_collection.rb'
 
-class SeasonCollectionTest < MiniTest::Test
+class SeasonCollectionTest < Minitest::Test
   def setup
     game_path = './test/data/games_sample.csv'
     team_path = './test/data/teams_sample.csv'
@@ -20,7 +20,6 @@ class SeasonCollectionTest < MiniTest::Test
     @teams = teams_collection.total_teams
     @stat_tracker = StatTracker.from_csv(locations)
 
-    # for support methods
     @team_26 = @teams.find {|team| team.team_id == "26"}
     @team_26_games = @games.find_all do |game|
       game.away_team_id == "26" || game.home_team_id == "26"
@@ -92,5 +91,51 @@ class SeasonCollectionTest < MiniTest::Test
 
   def test_it_has_average_goals_against
     assert_equal 2.5, @stat_tracker.average_goals_against("26", @team_26_post_season_games)
+  end
+
+  def test_it_can_find_best_coach
+    assert_equal "Dave Hakstol", @stat_tracker.winningest_coach("20172018")
+  end
+
+  def test_it_can_find_worst_coach
+    assert_equal "John Hynes", @stat_tracker.worst_coach("20172018")
+  end
+
+  def test_it_has_biggest_bust
+    assert_equal "Atlanta United", @stat_tracker.biggest_bust("20172018")
+  end
+
+  def test_it_has_biggest_surprise
+    assert_equal "FC Cincinnati", @stat_tracker.biggest_surprise("20172018")
+  end
+
+  def test_it_can_get_games_from_season
+    assert_equal 10, @stat_tracker.games_from_season("20172018").length
+    assert_equal 0, @stat_tracker.games_from_season("20132014").length
+  end
+
+  def test_it_can_get_team_ids_from_season
+    assert_equal ["1", "4", "26"], @stat_tracker.team_ids_from_season("20172018")
+    assert_equal [], @stat_tracker.team_ids_from_season("20132014")
+  end
+
+  def test_it_list_difference_between_regular_and_postseason_win_percentage_by_team_id
+    assert_equal -0.25, @stat_tracker.difference_between_reg_post_win_percentage("26", "20172018")
+  end
+
+  def test_it_has_most_accurate_team
+    assert_equal "Chicago Fire", @stat_tracker.most_accurate_team("20172018")
+  end
+
+  def test_it_has_least_accurate_team
+    assert_equal "Atlanta United", @stat_tracker.least_accurate_team("20172018")
+  end
+
+  def test_it_has_name_of_team_with_most_tackles
+    assert_equal "Chicago Fire", @stat_tracker.most_tackles("20172018")
+  end
+
+  def test_it_has_name_of_team_with_least_tackles
+    assert_equal "Atlanta United", @stat_tracker.fewest_tackles("20172018")
   end
 end
