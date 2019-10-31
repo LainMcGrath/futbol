@@ -1,35 +1,9 @@
-require 'csv'
 require './test/test_helper'
 require './lib/team_collection'
 
-class TeamsCollectionTest < Minitest::Test
+class TeamCollectionMethodsTest < MiniTest::Test
   def setup
     @total_teams = TeamCollection.new("./test/data/teams_sample.csv", "./test/data/game_teams_sample.csv")
-  end
-
-  def test_it_exists
-    assert_instance_of TeamCollection, @total_teams
-  end
-
-  def test_it_can_create_game_team
-    @total_teams.create_game_team("./test/data/game_teams_sample.csv")
-    expected = @total_teams.total_games.all? { |game_team| game_team.class == GameTeam }
-    assert_equal true, expected
-  end
-
-  def test_it_can_create_teams
-    @total_teams.create_teams("./test/data/teams_sample.csv")
-    expected = @total_teams.total_teams.all? { |team| team.class == Team }
-    assert_equal true, expected
-  end
-
-  def test_it_has_attributes
-    assert_equal 3, @total_teams.total_teams.length
-    assert_equal 40, @total_teams.total_games.length
-  end
-
-  def test_it_has_count_of_teams
-    assert_equal 3, @total_teams.count_of_teams
   end
 
   def test_it_has_the_best_offense

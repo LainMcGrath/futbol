@@ -60,7 +60,7 @@ class Team
     (win_count.to_f / total_away_games * 100).round(2)
   end
 
-    def away_games_by_team
+  def away_games_by_team
     away_games = @all_team_games.find_all { |game| game.hoa == "away"}
   end
 

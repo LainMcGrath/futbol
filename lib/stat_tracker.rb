@@ -5,6 +5,7 @@ require_relative './season_collection'
 
 class StatTracker
   include SeasonCollection
+  attr_reader :games_collection, :teams_collection, :games, :teams, :game_teams
 
   def initialize(game_path, team_path, game_team_path)
     # should we move the creation of instances into a method

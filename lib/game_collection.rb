@@ -8,7 +8,6 @@ class GameCollection
     @total_games = create_games(game_path)
   end
 
-# created class method in Game to find all_games
   def create_games(game_path)
     csv = CSV.read(game_path, headers: true, header_converters: :symbol)
     csv.map do |row|
@@ -16,10 +15,6 @@ class GameCollection
     end
   end
 
-  #method to sort by total goals
-  #max_by { \game| game. away + game. home}
-  #min_by ""
-  # OR just sort game_sums and pull the first/last
   def highest_total_score
     game_sums = @total_games.map do |game|
       game.home_goals + game.away_goals
@@ -28,7 +23,6 @@ class GameCollection
   end
 
   def lowest_total_score
-    #game_sums has been used the same twice now
     game_sums = @total_games.map do |game|
       game.home_goals + game.away_goals
     end
@@ -87,9 +81,6 @@ class GameCollection
     season_list = count_of_games_by_season
     season_list.transform_values! do |total_season_games|
       [total_season_games, 0]
-      # transforming hash so that..
-      # Season (key value) = [total games of season, total goals of season]
-      # transform again dividing goals/games to get average for each season
     end
     @total_games.each do |game|
       season_list[game.season][1] += game.home_goals
