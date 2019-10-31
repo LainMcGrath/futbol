@@ -68,7 +68,7 @@ module SeasonCollection
           average_goals_scored: average_goals_scored(team.team_id, post_season_games),
           average_goals_against: average_goals_against(team.team_id, post_season_games)
         },
-        :regular_season => {
+        :regularseason => {
           win_percentage: win_percentage(team.team_id, regular_season_games),
           total_goals_scored: total_goals_scored(team.team_id, regular_season_games),
           total_goals_against: total_goals_against(team.team_id, regular_season_games),
@@ -160,7 +160,7 @@ module SeasonCollection
 
   def difference_between_reg_post_win_percentage(team_id, season_id)
       summary = seasonal_summary(team_id)[season_id]
-      reg = summary[:regular_season][:win_percentage]
+      reg = summary[:regularseason][:win_percentage]
       post = summary[:postseason][:win_percentage]
       difference = reg - post
   end
