@@ -36,42 +36,42 @@ class SeasonCollectionTest < Minitest::Test
     assert_equal "20172018", @stat_tracker.worst_season("26")
   end
 
-  # def test_it_has_seasonal_summary
-  #   expected_hash = {
-  #     "20172018" => {:postseason =>
-  #                     {
-  #                       :win_percentage=>0.5,
-  #                       :total_goals_scored=>4,
-  #                       :total_goals_against=>5,
-  #                       :average_goals_scored=>2.0,
-  #                       :average_goals_against=>2.5
-  #                     },
-  #                   :regularseason =>
-  #                     {
-  #                       :win_percentage=>0.25,
-  #                       :total_goals_scored=>6,
-  #                       :total_goals_against=>9,
-  #                       :average_goals_scored=>1.5,
-  #                       :average_goals_against=>2.25
-  #                     }},
-  #     "20152016" => {:postseason =>
-  #                     {
-  #                       :win_percentage=>0.5,
-  #                       :total_goals_scored=>4,
-  #                       :total_goals_against=>4,
-  #                       :average_goals_scored=>2.0,
-  #                       :average_goals_against=>2.0
-  #                     },
-  #                    :regularseason =>
-  #                     {
-  #                       :win_percentage=>0.5,
-  #                       :total_goals_scored=>14,
-  #                       :total_goals_against=>10,
-  #                       :average_goals_scored=>3.5,
-  #                       :average_goals_against=>2.5}
-  #                     }}
-  #   assert_equal expected_hash, @stat_tracker.seasonal_summary("26")
-  # end
+  def test_it_has_seasonal_summary
+    expected_hash = {
+      "20172018" => {:postseason =>
+                      {
+                        :win_percentage=>0.5,
+                        :total_goals_scored=>4,
+                        :total_goals_against=>5,
+                        :average_goals_scored=>2.0,
+                        :average_goals_against=>2.5
+                      },
+                    :regular_season =>
+                      {
+                        :win_percentage=>0.25,
+                        :total_goals_scored=>6,
+                        :total_goals_against=>9,
+                        :average_goals_scored=>1.5,
+                        :average_goals_against=>2.25
+                      }},
+      "20152016" => {:postseason =>
+                      {
+                        :win_percentage=>0.5,
+                        :total_goals_scored=>4,
+                        :total_goals_against=>4,
+                        :average_goals_scored=>2.0,
+                        :average_goals_against=>2.0
+                      },
+                     :regular_season =>
+                      {
+                        :win_percentage=>0.5,
+                        :total_goals_scored=>14,
+                        :total_goals_against=>10,
+                        :average_goals_scored=>3.5,
+                        :average_goals_against=>2.5}
+                      }}
+    assert_equal expected_hash, @stat_tracker.seasonal_summary("26")
+  end
 
   def test_it_has_a_win_percentage
     assert_equal 0.5, @stat_tracker.win_percentage("26", @team_26_post_season_games)
@@ -138,6 +138,4 @@ class SeasonCollectionTest < Minitest::Test
   def test_it_has_name_of_team_with_least_tackles
     assert_equal "Atlanta United", @stat_tracker.fewest_tackles("20172018")
   end
-
->>>>>>> 8847c68ba8a6db5960e8a1277156598569116d46
 end
